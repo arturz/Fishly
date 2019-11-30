@@ -1,8 +1,7 @@
 {
-  "name": "react-php-starterkit",
+  "name": "projekt-pai",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "webpack --progress --env.NODE_ENV=production --mode production",
     "watch": "webpack  --colors --debug --display-chunk -w --env.NODE_ENV=development --mode development"
