@@ -93,6 +93,8 @@ export default () => {
       </>
     )
 
+  const word = set.words[currentWordIndex]
+
   return (
     <>
       <Header />
@@ -117,8 +119,10 @@ export default () => {
               <Grid container className={classes.wordCardContainer}>
                 <Grid item md={10} xs={12}>
                   <WordCard 
-                    original={set.words[currentWordIndex].original}
-                    translated={set.words[currentWordIndex].translated}
+                    original={word.original}
+                    translated={word.translated}
+                    translatedLanguage={word.translatedLanguage}
+                    key={word.original+word.translated}
                   />
                   <div className={classes.controls}>
                     <Button variant="contained" color="primary" onClick={previousWord} disabled={currentWordIndex === 0}>
