@@ -48,8 +48,6 @@ export default ({ original, translated, translatedLanguage }: { original: string
   const [flipped, setFlipped] = useState(false)
   const classes = useStyles({ flipped })
 
-  useEffect(() => setFlipped(false), [original, translated])
-
   const handleKeyDown = useCallback(({ code, repeat }) =>
     !repeat && (code === 'ArrowUp' || code === 'ArrowDown') && setFlipped(flipped => !flipped)
   , [flipped])
