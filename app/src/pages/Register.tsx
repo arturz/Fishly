@@ -5,6 +5,8 @@ import ReCAPTCHA from "react-google-recaptcha"
 import fetchPost from '../utils/fetchPost'
 import Alert from '../components/Alert'
 
+const captchaSitekey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
     'body': {
@@ -30,7 +32,7 @@ export default () => {
     login: '',
     password: '',
     repeatedPassword: '',
-    mail: '',
+    email: '',
     firstname: '',
     lastname: ''
   })
@@ -76,14 +78,11 @@ export default () => {
             <TextField label="Login" onChange={updateState('login')} />
             <TextField label="Hasło" type="password" onChange={updateState('password')} />
             <TextField label="Powtórz hasło" type="password" onChange={updateState('repeatedPassword')} />
-            <TextField label="Email" onChange={updateState('mail')} />
+            <TextField label="Email" onChange={updateState('email')} />
             <TextField label="Twoje imię" onChange={updateState('firstname')} />
             <TextField label="Twoje nazwisko" onChange={updateState('lastname')} />
             <br />
-            <ReCAPTCHA 
-              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-              onChange={setCaptcha}
-            />
+            <ReCAPTCHA sitekey={captchaSitekey} onChange={setCaptcha} />
             <br />
             <Button variant="contained" color="primary" type="submit">
               Zarejestruj się

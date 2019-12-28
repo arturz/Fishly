@@ -17,12 +17,12 @@ const Router = ['localhost','127.0.0.1','[::1]',''].includes(location.hostname)
   : props => <BrowserRouter {...props} />
 
 export default () => {
-  const [{ logged }] = useStateValue()
+  const [{ user }] = useStateValue()
   
   return (
     <Router>
     {
-      logged ? (
+      user ? (
         <Switch>
           <Route exact path="/">
             <IndexLogged />

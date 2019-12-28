@@ -6,10 +6,6 @@
     global $captchaUrl;
     global $captchaSecret;
 
-    if(empty($captcha)){
-      return false;
-    }
-
     $content = http_build_query([
       'secret' => $captchaSecret,
       'response' => $captcha

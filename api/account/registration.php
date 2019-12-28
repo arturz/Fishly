@@ -1,10 +1,10 @@
 <?php
-  header('Content-type: text/plain; charset=utf-8');
-  require_once '../utils.php';
-  require_once '../captcha.php';
-  require_once '../pdo.php';
+  require_once '../core.php';
+  require_once './helpers/isValidCaptcha.php';
+  require_once './helpers/sendMail.php';
+  require_once './helpers/password.php';
 
-  if(!isValidCaptcha($_POST['captcha']))
+  if(empty($_POST['captcha']) || !isValidCaptcha($_POST['captcha']))
     throwError('Zła captcha');
 
   if(empty($_POST['login']))
@@ -13,8 +13,8 @@
   if(empty($_POST['password']))
     throwError('Brakujące hasło');
 
-  if(empty($_POST['mail']))
-    throwError('Brakujący mail');
+  if(empty($_POST['email']))
+    throwError('Brakujący e-mail');
 
   if(empty($_POST['firstname']))
     throwError('Brakujące imię');
@@ -24,9 +24,39 @@
 
   $login = $_POST['login'];
   $password = $_POST['password'];
-  $mail = $_POST['mail'];
+  $email = $_POST['email'];
   $firstname = $_POST['firstname'];
   $lastname = $_POST['lastname'];
+  $status = array_search('registration_not_confirmed', $userStatuses);
+  
+  $stmt = $pdo->prepare('SELECT * from user where login = ?');
+  $stmt->execute([$login]);
+  if($stmt->fetch())
+    throwError('Ten login jest już zajęty');
 
-  echo json_encode(['success' => true])
+  $stmt = $pdo->prepare('SELECT * from user where email = ?');
+  $stmt->execute([$email]);
+  if($stmt->fetch())
+    throwError('Ten email jest już zajęty');
+
+  $registrationConfirmHash = bin2hex(random_bytes(16));
+  $message = "
+    Kliknij, aby aktywować swoje konto Fishly: <a href=$url/api/account/registration_confirm.php?hash=$registrationConfirmHash target=__blank>Aktywuj konto</a>
+  ";
+
+  if(!sendMail($email, 'Aktywacja konta Fishly', trim($message)))
+    throwError('Nie można wysłać linku aktywacyjnego');
+
+  $hashedPassword = hashPassword($password);
+  $pdo
+    ->prepare('INSERT INTO user (login, hashed_password, email, firstname, lastname, status, registration_ip) VALUES (?,?,?,?,?,?,?)')
+    ->execute([$login, $hashedPassword, $email, $firstname, $lastname, $status, $_SERVER['REMOTE_ADDR']]);
+
+  $userId = $pdo->lastInsertId();
+
+  $pdo
+    ->prepare('INSERT INTO registration_confirm_hash (user_id, hash) VALUES (?,?)')
+    ->execute([$userId, $registrationConfirmHash]);
+
+  success();
 ?>

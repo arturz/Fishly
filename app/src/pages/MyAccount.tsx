@@ -6,6 +6,12 @@ import Main from '../components/Main'
 import RemoveAccountDialog from '../components/AccountPage/RemoveAccountDialog'
 import { useStateValue } from '../state'
 
+const statusNames = {
+  'user': 'użytkownik',
+  'admin': 'administrator',
+  'headadmin': 'główny administrator'
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: 'unset',
@@ -61,7 +67,7 @@ export default () => {
                   E-mail:
                 </Typography>
                 <Typography variant="body1">
-                { user.mail }
+                { user.email }
                 </Typography>
               </p>
               <Button variant="contained" color="primary">
@@ -69,10 +75,10 @@ export default () => {
               </Button>
               <p>
                 <Typography variant="h6">
-                  Status użytkownika:
+                  Status:
                 </Typography>
                 <Typography variant="body1">
-                  uczeń (niezweryfikowany)
+                { statusNames[user.status] || 'nieznany' }
                 </Typography>
               </p>
             </Grid>

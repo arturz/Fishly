@@ -1,11 +1,11 @@
 <?php
-  $logged = true; 
-  $user = (object) [
-    'firstname' => 'Jan',
-    'lastname' => 'Kowalski',
-    'mail' => 'testowy@mail.com',
-    'login' => 'testowy_login'
-  ];
+  session_start();
+
+  if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+  } else {
+    $user = null;
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,10 +19,7 @@
   </head>
   <script type="text/javascript">
     var STATIC_URL = 'http://localhost/projekt';
-    var app = {
-      user: <?php echo json_encode($user); ?>,
-      logged: <?php echo json_encode($logged); ?>
-    };
+    var app = { user: <?php echo json_encode($user); ?> };
   </script>
   <body>
     <div id="app"></div>

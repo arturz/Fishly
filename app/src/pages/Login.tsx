@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Theme, Container, makeStyles, Avatar, Typography, TextField, Button, CardContent, Card } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import fetchPost from '../utils/fetchPost'
+import Alert from '../components/Alert'
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
@@ -9,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   card: {
-    marginTop: theme.spacing(8),
+    margin: theme.spacing(8, 0)
   },
   title: {
     margin: theme.spacing(2, 0)
@@ -26,22 +28,48 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export default () => {
-  const classes = useStyles({})
+  const [state, setState] = useState({
+    login: '',
+    password: ''
+  })
+  const [error, setError] = useState(null)
 
+  const updateState = key => useCallback(({ target: { value } }) =>
+    setState(state => ({
+      ...state,
+      [key]: value
+    })), [])
+  
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    const { error, ...user } = await fetchPost('api/account/login.php', state)
+    if(error){
+      setError(error)
+      return
+    }
+
+    console.log(user)
+  }
+  
+  const classes = useStyles({})
   return (
     <Container maxWidth="xs">
       <Card className={classes.card}>
         <CardContent>
-          <form className={classes.form}>
+          <form onSubmit={handleSubmit} className={classes.form}>
+            {
+              error && <Alert title="Błąd" handleClose={() => setError(null)}>{ error }</Alert>
+            }
             <Avatar>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h3" className={classes.title}>
               Zaloguj
             </Typography>
-            <TextField label="Login" />
-            <TextField label="Hasło" />
-            <Button variant="contained" color="primary" className={classes.button}>
+            <TextField label="Login" value={state.login} onChange={updateState('login')} />
+            <TextField label="Hasło" value={state.password} onChange={updateState('password')} />
+            <Button type="submit" variant="contained" color="primary" className={classes.button}>
               Zaloguj się
             </Button>
           </form>

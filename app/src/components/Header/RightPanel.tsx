@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button, IconButton, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useStateValue } from '../../state'
+import fetchPost from '../../utils/fetchPost'
 
 const useStyles = makeStyles(() => ({
   link: { 
@@ -12,13 +13,19 @@ const useStyles = makeStyles(() => ({
 }))
 
 export default () => {
-  const [{ logged }, dispatch] = useStateValue()
+  const [{ user }, dispatch] = useStateValue()
   const classes = useStyles({})
 
-  if(logged)
+  const logOut = useCallback(() => {
+    dispatch({ type: 'logOut' })
+    fetchPost('api/account/logout.php')
+    document.cookie = 'PHPSESSID='
+  }, [])
+
+  if(user)
     return (
       <div>
-        <Button color="inherit" onClick={() => dispatch({ type: 'logOut' })}>
+        <Button color="inherit" onClick={logOut}>
           Wyloguj
         </Button>
         <Link to="/account" className={classes.link}>

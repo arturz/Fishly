@@ -14,7 +14,6 @@ const App = () => {
       case 'logOut':
         return {
           ...state,
-          logged: false,
           user: null
         }
 
