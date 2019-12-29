@@ -1,10 +1,12 @@
 <?php
   session_start();
 
-  if(isset($_SESSION['user'])){
+  if(isset($_SESSION['user']) && isset($_SESSION['token'])){
     $user = $_SESSION['user'];
+    $token = $_SESSION['token'];
   } else {
     $user = null;
+    $token = null;
   }
 ?>
 <!doctype html>
@@ -19,7 +21,10 @@
   </head>
   <script type="text/javascript">
     var STATIC_URL = 'http://localhost/projekt';
-    var app = { user: <?php echo json_encode($user); ?> };
+    var app = { 
+      user: <?php echo json_encode($user); ?>,
+      token: <?php echo json_encode($token); ?>
+    };
   </script>
   <body>
     <div id="app"></div>

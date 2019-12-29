@@ -1,5 +1,4 @@
 <?php
-  session_start();
   include_once '../core.php';
 
   if(!isset($_SESSION['user']))

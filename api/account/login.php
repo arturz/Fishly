@@ -1,5 +1,4 @@
 <?php
-  session_start();
   require_once '../core.php';
   require_once './helpers/password.php';
 

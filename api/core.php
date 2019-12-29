@@ -1,12 +1,12 @@
 <?php
-  header('Content-type: text/plain; charset=utf-8');
-
   $url = 'http://localhost/projekt';
-
   $dbhost = 'localhost';
   $dbname = 'fishly';
   $dbuser = 'root';
   $dbpassword = '';
+
+  session_start();
+  header('Content-type: text/plain; charset=utf-8');
 
   try {
     $pdo = new PDO("mysql:host=".$dbhost.";dbname=".$dbname, $dbuser, $dbpassword);
@@ -21,6 +21,13 @@
 
   function success(){
     die(json_encode([ 'success' => true ]));
+  }
+
+  function getUser(){
+    if(empty($_SESSION['user']))
+      return null;
+
+    return $_SESSION['user'];
   }
 
   $userStatuses = [

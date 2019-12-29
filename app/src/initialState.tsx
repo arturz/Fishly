@@ -2,5 +2,6 @@
 import app from 'app'
 
 export default {
-  user: app.user
+  user: app.user,
+  token: app.token
 }
