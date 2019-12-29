@@ -54,7 +54,7 @@
   $userId = $pdo->lastInsertId();
 
   $pdo
-    ->prepare('INSERT INTO registration_confirm_hash (user_id, hash) VALUES (?,?)')
+    ->prepare('INSERT INTO registration_confirm_hash (user_id, hash, created_at) VALUES (?,?,NOW())')
     ->execute([$userId, $registrationConfirmHash]);
 
   success();

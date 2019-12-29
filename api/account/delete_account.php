@@ -24,7 +24,7 @@
   }
   
   /**
-   * Admin usuwa użytkownika - trzeba sprawdzić czy jest adminem i usunąć też potencjalny link aktywacyjny użytkownika.
+   * Admin usuwa użytkownika - trzeba sprawdzić czy jest adminem i usunąć link aktywacyjny użytkownika (jeśli użytkownik nie jest aktywowany).
    */
   if($user['status'] === array_search('admin', $userStatuses) || $user['status'] === array_search('head_admin', $userStatuses)){
     $stmt = $pdo->prepare('UPDATE user SET status = ? WHERE user_id = ?');

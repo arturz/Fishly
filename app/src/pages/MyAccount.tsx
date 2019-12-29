@@ -9,7 +9,7 @@ import { useStateValue } from '../state'
 const statusNames = {
   'user': 'użytkownik',
   'admin': 'administrator',
-  'headadmin': 'główny administrator'
+  'head_admin': 'główny administrator'
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
