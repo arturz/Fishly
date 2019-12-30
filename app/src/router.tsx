@@ -39,18 +39,13 @@ export default () => {
           <Route path="/account">
             <MyAccount />
           </Route>
-
-          { /* test */ }
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/admin">
-            <Admin />
-          </Route>
-
+          {
+            (user.status === 'admin' || user.status === 'head_admin') && (
+              <Route path="/admin">
+                <Admin />
+              </Route>
+            )
+          }
           <Route path="*">
             <Redirect to="/" />
           </Route>

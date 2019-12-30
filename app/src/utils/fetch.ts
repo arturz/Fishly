@@ -5,9 +5,11 @@ export default async (path: string, data?: object) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    }, 
-    ...data && { body: stringify(data) }
+    },
+    body: stringify({
+      ...data,
+      token: sessionStorage.getItem('token')
+    })
   })
-  const result = await body.json()
-  return result
+  return await body.json()
 }

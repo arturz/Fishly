@@ -3,7 +3,7 @@ import { Theme, Container, makeStyles, Avatar, Typography, TextField, Button, Ca
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ReCAPTCHA from "react-google-recaptcha"
 import { captchaSitekey } from '../config/captcha'
-import fetchPost from '../utils/fetchPost'
+import fetch from '../utils/fetch'
 import Alert from '../components/Alert'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 enum RegistrationStates {
-  NotRegistered,
+  Initial,
   Requesting,
   SentMail
 }
 
 export default () => {
-  const [registrationState, setRegistrationState] = useState(RegistrationStates.NotRegistered)
+  const [registrationState, setRegistrationState] = useState(RegistrationStates.Initial)
   const [state, setState] = useState({
     login: '',
     password: '',
@@ -67,9 +67,9 @@ export default () => {
     }
 
     setRegistrationState(RegistrationStates.Requesting)
-    const { error, success } = await fetchPost('api/account/registration.php', { captcha, ...state })
+    const { error, success } = await fetch('api/account/registration.php', { captcha, ...state })
     if(error){
-      setRegistrationState(RegistrationStates.NotRegistered)
+      setRegistrationState(RegistrationStates.Initial)
       setError(error)
       return
     }
@@ -85,7 +85,7 @@ export default () => {
       <Card className={classes.card}>
         <CardContent>
         {
-          [RegistrationStates.NotRegistered, RegistrationStates.Requesting].includes(registrationState) ? (
+          [RegistrationStates.Initial, RegistrationStates.Requesting].includes(registrationState) ? (
             <form className={classes.form} onSubmit={handleSubmit}>
               {
                 error && <Alert title="Błąd" handleClose={() => setError(null)}>{ error }</Alert>

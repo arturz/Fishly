@@ -1,14 +1,13 @@
 <?php
   include_once '../core.php';
 
-  if(!isset($_SESSION['user']))
-    throwError('Nie jesteś zalogowany');
+  $user = getUser();
+  if(!$user)
+    throwError('Zaloguj się');
 
   if(!isset($_POST['userId']))
     throwError('Brakujący id');
-
   $userIdToDelete = $_POST['userId'];
-  $user = $_SESSION['user'];
 
   /**
    * Użytkownik usuwa sam siebie.

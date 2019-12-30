@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import { Theme, Container, makeStyles, Avatar, Typography, TextField, Button, CardContent, Card } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import fetchPost from '../utils/fetchPost'
+import fetch from '../utils/fetch'
 import Alert from '../components/Alert'
+import { useStateValue } from '../state'
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
@@ -27,7 +28,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
+enum LogInStates {
+  Initial,
+  Requesting
+}
+
 export default () => {
+  const [logInState, setLogInState] = useState(LogInStates.Initial)
   const [state, setState] = useState({
     login: '',
     password: ''
@@ -40,16 +47,22 @@ export default () => {
       [key]: value
     })), [])
   
+  const [, dispatch] = useStateValue()
   const handleSubmit = async event => {
     event.preventDefault()
 
-    const { error, ...user } = await fetchPost('api/account/login.php', state)
+    setLogInState(LogInStates.Requesting)
+    const { error, user, token } = await fetch('api/account/login.php', state)
+    setLogInState(LogInStates.Initial)
     if(error){
       setError(error)
       return
     }
 
-    console.log(user)
+    console.log(user, token)
+
+    sessionStorage.setItem('token', token)
+    dispatch({ type: 'logIn', payload: { user } })
   }
   
   const classes = useStyles({})
@@ -68,8 +81,8 @@ export default () => {
               Zaloguj
             </Typography>
             <TextField label="Login" value={state.login} onChange={updateState('login')} />
-            <TextField label="Hasło" value={state.password} onChange={updateState('password')} />
-            <Button type="submit" variant="contained" color="primary" className={classes.button}>
+            <TextField label="Hasło" type="password" value={state.password} onChange={updateState('password')} />
+            <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={logInState === LogInStates.Requesting}>
               Zaloguj się
             </Button>
           </form>

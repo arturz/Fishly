@@ -37,7 +37,12 @@
     'lastname' => $row['lastname'],
     'status' => $userStatuses[$row['status']]
   ];
+  $token = getRandomText(16);
 
   $_SESSION['user'] = $user;
-  echo json_encode($user);
+  $_SESSION['token'] = $token;
+  echo json_encode([
+    'user' => $user,
+    'token' => $token
+  ]);
 ?>

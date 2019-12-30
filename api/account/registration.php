@@ -13,7 +13,7 @@
   if(empty($_POST['password']) || mb_strlen($_POST['password']) < 3)
     throwError('Złe hasło');
 
-  if(empty($_POST['email']) || mb_strlen($_POST['email']) < 3)
+  if(empty($_POST['email']) || mb_strlen($_POST['email']) < 3 || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
     throwError('Zły e-mail');
 
   if(empty($_POST['firstname']) || mb_strlen($_POST['firstname']) < 3)

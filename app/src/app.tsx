@@ -17,6 +17,12 @@ const App = () => {
           user: null
         }
 
+      case 'logIn':
+        return {
+          ...state,
+          user: action.payload.user
+        }
+
       default:
         return state
     }

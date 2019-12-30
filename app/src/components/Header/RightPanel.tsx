@@ -3,7 +3,7 @@ import { Button, IconButton, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useStateValue } from '../../state'
-import fetchPost from '../../utils/fetchPost'
+import fetch from '../../utils/fetch'
 
 const useStyles = makeStyles(() => ({
   link: { 
@@ -18,8 +18,8 @@ export default () => {
 
   const logOut = useCallback(() => {
     dispatch({ type: 'logOut' })
-    fetchPost('api/account/logout.php')
-    document.cookie = 'PHPSESSID='
+    fetch('api/account/logout.php')
+    document.cookie = 'PHPSESSID=;path=/;'
   }, [])
 
   if(user)
