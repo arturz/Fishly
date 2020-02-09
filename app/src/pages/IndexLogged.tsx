@@ -10,8 +10,8 @@ import sets from '../mocks/sets'
 
 const useStyles = makeStyles((theme: Theme) => ({
   hello: {
-    margin: theme.spacing(4, 0)
-  },
+    margin: theme.spacing(8, 0)
+  }, 
   findContainer: {
     display: 'flex',
     marginBottom: theme.spacing(4)
@@ -24,7 +24,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 10
   },
   grouppedSets: {
-    paddingBottom: theme.spacing(4)
+    paddingBottom: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0, 1, 1)
+    }
   },
   link: {
     color: theme.palette.common.white,
