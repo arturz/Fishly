@@ -5,6 +5,7 @@ import { makeStyles, Container, Typography, Grid, CircularProgress, Card, List, 
 import { useParams, Link } from 'react-router-dom'
 import WordCard from '../components/WordCard'
 import sets from '../mocks/sets'
+import getSet from '../api/set/getSet'
 
 const useStyles = makeStyles((theme: Theme) => ({
   leftPanel: {
@@ -26,11 +27,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const fetchSet = async (id: number) => {
-  
-  return sets[id]
-}
-
 export default () => {
   const [set, setSet] = useState(null)
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -42,7 +38,7 @@ export default () => {
     if(!id)
       return
     
-    fetchSet(parseInt(id)).then(setSet)
+    getSet(parseInt(id)).then(setSet)
   }, [id])
 
   const nextWord = useCallback(() =>
@@ -112,7 +108,7 @@ export default () => {
                 </Grid>
                 <Grid item>
                   <Typography variant="body2">
-                    Autor: <Link to={`/account/${set.createdBy.login}`} className={classes.link}>{ set.createdBy.login }</Link>
+                    Autor: <Link to={`/account/${set.login}`} className={classes.link}>{ set.login }</Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -121,7 +117,6 @@ export default () => {
                   <WordCard 
                     original={word.original}
                     translated={word.translated}
-                    translatedLanguage={word.translatedLanguage}
                     key={word.original+word.translated}
                   />
                   <div className={classes.controls}>

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-export default ({ original, translated, translatedLanguage }: { original: string, translated: string, translatedLanguage: string }) => {
+export default ({ original, translated }: { original: string, translated: string }) => {
   const [flipped, setFlipped] = useState(false)
   const classes = useStyles({ flipped })
 

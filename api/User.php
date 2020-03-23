@@ -76,14 +76,13 @@
       return json_encode([ 'user' => $this->getUserData(), 'token' => $this->getToken() ]);
     }
 
-    protected static $token;
     protected function generateToken(){
       $token = getRandomText(16);
-      User::$token = $token;
       $_SESSION['token'] = $token;
+      return $token;
     }
     public function getToken(){
-      return User::$token;
+      return $_SESSION['token'];
     }
   }
 ?>

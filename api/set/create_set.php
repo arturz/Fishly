@@ -12,7 +12,7 @@
 
   $name = $_POST['name'];
   $subject = $_POST['subject'];
-  $words = json_decode($_POST['words'], true);
+  $words = $_POST['words'];
 
   $pdo
     ->prepare('INSERT INTO `set` (created_by, name, subject) VALUES (?,?,?)')

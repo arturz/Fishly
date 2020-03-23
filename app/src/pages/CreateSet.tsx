@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Main from '../components/Main'
 import { Container, Theme, Typography, Grid, makeStyles, Card, List, ListItem, CardContent, CardActions, Button, TextField, Divider, IconButton, InputBase, Paper, FormControl, InputLabel, Select } from '@material-ui/core'
 import createSet from '../api/set/createSet'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme: Theme) => ({
   controls: {
@@ -26,8 +27,6 @@ export default () => {
   const [name, setName] = useState('')
   const [subject, setSubject] = useState('')
   const [words, setWords] = useState([{ original: '', translated: '', __id: ++wordsId.current }])
-
-  const classes = useStyles({})
 
   const handleChangeOriginalWord = index => ({ target: { value } }) => {
     const newWords = [...words]
@@ -61,14 +60,27 @@ export default () => {
     setWords(newWords)
   }
 
+
+  const history = useHistory()
   let [submitting, setSubmitting] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    const filteredWords = words
+      .map(({ original, translated }) => ({ original, translated }))
+      .filter(({ original, translated }) => original && translated)
+
+    if(!name || !subject || filteredWords.length === 0)
+      return
+
     setSubmitting(true)
-    await createSet(name, subject, words)
+
+    const { setId } = await createSet(name, subject, filteredWords)
+    history.push(`/set/${setId}`)
     setSubmitting(false)
   }
 
+  const classes = useStyles({})
   return (
     <>
       <Header />
@@ -77,8 +89,8 @@ export default () => {
           <Typography variant="h4" gutterBottom>Stwórz zestaw</Typography>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <div className={classes.controls}>
-              <TextField label="Nazwa zestawu" onChange={(e, value) => setName(value)} />
-              <TextField label="Kategoria" onChange={(e, value) => setSubject(value)} />
+              <TextField label="Nazwa zestawu" onChange={({ target: { value }}) => setName(value)} />
+              <TextField label="Kategoria" onChange={({ target: { value }}) => setSubject(value)} />
             </div>
             <Typography variant="h5" gutterBottom>Dodaj fiszki</Typography>
             <Grid container direction="column" className={classes.wordsContainer} spacing={1}>
