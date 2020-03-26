@@ -3,7 +3,7 @@
 
   $setId = $_GET['setId'];
 
-  $stmt = $pdo->prepare("SELECT set_id, name, subject, user_id, login FROM `set` s INNER JOIN `user` u ON s.created_by = u.user_id WHERE s.set_id = ?");
+  $stmt = $pdo->prepare("SELECT set_id, name, subject, user_id, login FROM `set` s INNER JOIN `user` u ON s.created_by = u.user_id");
   $stmt->execute([$setId]);
 
   $set = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -14,6 +14,17 @@
 
   while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
     $set['words'][] = $row;
+  }
+
+  $set['saved'] = false;
+
+  $user = new User();
+  if($user->isLogged()){
+    $stmt = $pdo->prepare("SELECT * FROM `saved_set` WHERE set_id = ? AND user_id = ?");
+    $stmt->execute([$setId, $user->userId]);
+
+    if($stmt->fetch())
+      $set['saved'] = true;
   }
   
   echo json_encode($set);

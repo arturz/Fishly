@@ -9,6 +9,7 @@ import { useStateValue } from '../state'
 import Set from '../components/Set'
 import sets from '../mocks/sets'
 import findSets from '../api/set/findSets'
+import getSavedSets from '../api/set/saved/getSavedSets'
 import Find from '../components/IndexLogged/Find'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -33,6 +34,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default () => {
   const [{ user: { firstname } }] = useStateValue()
 
+  const [savedSets, setSavedSets] = useState([])
+  useEffect(() => {
+    getSavedSets().then(setSavedSets)
+  }, [])
+
   const classes = useStyles({})
   return (
     <>
@@ -43,16 +49,18 @@ export default () => {
             Witaj, { firstname }!
           </Typography>
           <Find />
-          <Typography variant="h5" gutterBottom>
-            Zapisane zestawy
-          </Typography>
-          <div className={classes.grouppedSets}>
-            {sets.map(({ name, subject }, index) => (
-              <Link to={`/set/${index}`} key={index}>
-                <Set key={name} name={name} subject={subject} />
-              </Link>
-            ))}
-          </div>
+          {savedSets.length === 0 || <>
+            <Typography variant="h5" gutterBottom>
+              Zapisane zestawy
+            </Typography>
+            <div className={classes.grouppedSets}>
+              {savedSets.map(({ name, subject, set_id }) => (
+                <Link to={`/set/${set_id}`} key={set_id}>
+                  <Set key={name} name={name} subject={subject} />
+                </Link>
+              ))}
+            </div>
+          </>}
           <Typography variant="h5" gutterBottom>
             Twoje zestawy
           </Typography>

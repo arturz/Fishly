@@ -6,6 +6,7 @@ import { useParams, Link } from 'react-router-dom'
 import WordCard from '../components/WordCard'
 import sets from '../mocks/sets'
 import getSet from '../api/set/getSet'
+import toggleSavedSet from '../api/set/saved/toggleSavedSet'
 
 const useStyles = makeStyles((theme: Theme) => ({
   leftPanel: {
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.primary.main
   }
 }))
+
+enum SavedStatus { Unknown, Unsaved, Changing, Saved }
 
 export default () => {
   const [set, setSet] = useState(null)
@@ -70,13 +73,15 @@ export default () => {
       window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
-  const [savedStatus, setSavedStatus] = useState(false)
-  const save = async () => {
-    setSavedStatus(true)
-  }
-
-  const unsave = async () => {
-    setSavedStatus(false)
+  const [saveTransform, setSaveTransform] = useState(false)
+  const toggleSavedState = async () => {
+    setSaveTransform(true)
+    const { toggled } = await toggleSavedSet(set.set_id)
+    setSet({
+      ...set,
+      saved: toggled
+    })
+    setSaveTransform(false)
   }
 
   if(set === null)
@@ -151,12 +156,12 @@ export default () => {
                   <ListItem>
                     <Grid container justify="space-between">
                       {
-                        savedStatus ? (
-                          <Button variant="outlined" onClick={unsave} size="small">
+                        set.saved ? (
+                          <Button variant="outlined" onClick={toggleSavedState} size="small" disabled={saveTransform}>
                             Usuń z zapisanych
                           </Button> 
                         ) : (
-                          <Button variant="outlined" onClick={save} size="small">
+                          <Button variant="outlined" onClick={toggleSavedState} size="small" disabled={saveTransform}>
                             Zapisz
                           </Button> 
                         )

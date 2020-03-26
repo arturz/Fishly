@@ -56,12 +56,12 @@ export default () => {
         <DirectionsIcon />
       </IconButton>
     </Paper>
-    <div className={classes.grouppedSets}>
-      {foundSets.length !== 0 && foundSets.map(({ name, subject, set_id }) => (
+    {foundSets.length !== 0 && <div className={classes.grouppedSets}>
+      {foundSets.map(({ name, subject, set_id }) => (
         <Link to={`/set/${set_id}`} key={set_id}>
           <Set key={name} name={name} subject={subject} />
         </Link>
       ))}
-    </div>
+    </div>}
   </>
 }
