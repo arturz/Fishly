@@ -3,7 +3,7 @@
 
   $setId = $_GET['setId'];
 
-  $stmt = $pdo->prepare("SELECT set_id, name, subject, user_id, login FROM `set` s INNER JOIN `user` u ON s.created_by = u.user_id");
+  $stmt = $pdo->prepare("SELECT set_id, name, subject, user_id, login FROM `set` s INNER JOIN `user` u ON s.created_by = u.user_id WHERE set_id = ?");
   $stmt->execute([$setId]);
 
   $set = $stmt->fetch(PDO::FETCH_ASSOC);
