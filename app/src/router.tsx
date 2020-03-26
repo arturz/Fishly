@@ -9,7 +9,6 @@ import Account from './pages/Account'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Admin from './pages/Admin'
-import MyAccount from './pages/MyAccount'
 
 //check for localhost
 const Router = ['localhost','127.0.0.1','[::1]',''].includes(location.hostname)
@@ -36,11 +35,8 @@ export default () => {
           <Route path="/account/:userId">
             <Account />
           </Route>
-          <Route path="/account">
-            <MyAccount />
-          </Route>
           {
-            (user.status === 'admin' || user.status === 'head_admin') && (
+            (user.status == '2' || user.status == '3') && (
               <Route path="/admin">
                 <Admin />
               </Route>

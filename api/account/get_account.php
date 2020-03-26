@@ -8,7 +8,7 @@
     $stmt = $pdo->prepare("SELECT user_id, firstname, lastname, email, login, status FROM `user` WHERE `user_id` = ?");
     $stmt->execute([$userId]);
   } else {
-    $stmt = $pdo->prepare("SELECT user_id, firstname, login FROM `user` WHERE `user_id` = ?");
+    $stmt = $pdo->prepare("SELECT user_id, firstname, login, status FROM `user` WHERE `user_id` = ?");
     $stmt->execute([$userId]);
   }
 

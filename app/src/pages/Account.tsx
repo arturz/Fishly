@@ -2,21 +2,30 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import { makeStyles, Container, Typography, Grid, CircularProgress, Card, List, ListItem, CardContent, CardActions, Button, Divider, Theme } from '@material-ui/core'
+import { makeStyles, Container, Typography, Grid, Card, List, ListItem, Divider, Theme } from '@material-ui/core'
 import Set from '../components/Set'
-import users from '../mocks/users'
-import sets from '../mocks/sets'
+import DeleteAccountDialog from '../components/AccountPage/DeleteAccountDialog'
 import getAccount from '../api/account/getAccount'
+import { useStateValue } from '../state'
 
 const useStyles = makeStyles((theme: Theme) => ({
   notFoundText: {
     textAlign: 'center',
-    margin: theme.spacing(8, 2, 0)
+    margin: theme.spacing(16, 2, 12)
+  },
+  link: {
+    color: 'unset',
+    textDecoration: 'none'
   }
 }))
 
+const statuses = ['Rejestracja niepotwierdzona','Użytkownik','Administrator','Główny administrator','Zbanowano','Usunięto']
+
 export default () => {
+  const [{ user }] = useStateValue()
   const { userId } = useParams()
+
+  const isSelf = user.userId === userId
 
   const [account, setAccount] = useState(null)
 
@@ -24,119 +33,73 @@ export default () => {
     getAccount(+userId).then(setAccount)
   }, [userId])
 
+  const [deleteAccountDialog, setDeleteAccountDialog] = useState(false)
+
   const classes = useStyles({})
+  if(account !== null && account.user_id === undefined)
+    return <>
+      <Header />
+      <Main>
+        <Typography variant="h4" className={classes.notFoundText}>Nie znaleziono użytkownika.</Typography>
+      </Main>
+    </>
 
   return <>
     <Header />
     <Main>
       <Container maxWidth="md">
-      {account !== null && <Grid container spacing={3} direction="row-reverse">
-        <Grid item xs={12} md={8}>
-          <Typography variant="h4">
-            Użytkownik { account.login }
-          </Typography>
-          <p>
-            <Typography variant="h6">
-              Imię:
-            </Typography>
-            <Typography variant="body1">
-            { account.firstname }
-            </Typography>
-          </p>
-          {account.sets.length === 0 || <p>
-            <Typography variant="h6" gutterBottom>Zestawy użytkownika</Typography>
-            {account.sets.map(({ name, subject, set_id }) => (
-              <Link to={`/set/${set_id}`} key={set_id}>
-                <Set key={name} name={name} subject={subject} />
-              </Link>
-            ))}
-          </p>}
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <List>
-              <ListItem>
-                <Typography variant="h6" gutterBottom>
-                  Dodatkowe opcje
-                </Typography>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                brak
-              </ListItem>
-            </List>
-          </Card>
-        </Grid>
-      </Grid>}
+        {account === null || <Grid container spacing={3} direction="row-reverse">
+          <Grid item xs={12} md={8}>
+            {isSelf
+              ? <Typography variant="h4" gutterBottom>Twoje konto</Typography>
+              : <Typography variant="h4" gutterBottom>Użytkownik { account.login }</Typography>}
+            <Typography variant="h6">Imię:</Typography>
+            <Typography variant="body1" gutterBottom>{ account.firstname }</Typography>
+            {isSelf && <>
+              <Typography variant="h6">Nazwisko:</Typography>
+              <Typography variant="body1" gutterBottom>{ account.lastname }</Typography>
+              <Typography variant="h6">Login:</Typography>
+              <Typography variant="body1" gutterBottom>{ account.login }</Typography>
+              <Typography variant="h6">E-mail:</Typography>
+              <Typography variant="body1" gutterBottom>{ account.email }</Typography>
+            </>}
+            <Typography variant="h6">Status:</Typography>
+            <Typography variant="body1" gutterBottom>{ statuses[account.status] }</Typography>
+            <br />
+            {account.sets.length === 0 || <>
+              <Typography variant="h6" gutterBottom>{ isSelf ? 'Twoje zestawy' : 'Zestawy użytkownika'}</Typography>
+              {account.sets.map(({ name, subject, set_id }) => (
+                <Link to={`/set/${set_id}`} key={set_id}>
+                  <Set key={name} name={name} subject={subject} />
+                </Link>
+              ))}
+            </>}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <List>
+                <ListItem>
+                  <Typography variant="h6" gutterBottom>
+                    Dodatkowe opcje
+                  </Typography>
+                </ListItem>
+                <Divider />
+                {isSelf || <ListItem>brak</ListItem>}
+                {isSelf && <>
+                  {deleteAccountDialog && <DeleteAccountDialog handleClose={() => setDeleteAccountDialog(value => !value)} />}
+                  <ListItem button onClick={() => setDeleteAccountDialog(true)}>Usuń konto</ListItem>
+                  {(account.status == '2' || account.status == '3') &&
+                    <Link to="/admin" className={classes.link}>
+                      <ListItem button>
+                        Panel administratora
+                      </ListItem>
+                    </Link>}
+                </>}
+              </List>
+            </Card>
+          </Grid>
+        </Grid>}
       </Container>
     </Main>
   </>
-
-  /*const user = users.find(({ login: userLogin } ) => userLogin === login)
-  if(!user){
-    return (
-      <>
-        <Header />
-        <Main>
-          <Typography variant="h4" className={classes.notFoundText}>
-            Nie znaleziono użytkownika.
-          </Typography>
-        </Main>
-      </>
-    )
-  }
-
-  const userSets = sets.filter(({ createdBy: { login: userLogin } } ) => userLogin === login)
-
-  return (
-    <>
-      <Header />
-      <Main>
-        <Container maxWidth="md">
-          <Grid container spacing={3} direction="row-reverse">
-            <Grid item xs={12} md={8}>
-              <Typography variant="h4">
-                Użytkownik { user.login }
-              </Typography>
-              <p>
-                <Typography variant="h6">
-                  Imię:
-                </Typography>
-                <Typography variant="body1">
-                { user.firstname }
-                </Typography>
-              </p>
-              <p>
-                <Typography variant="h6" gutterBottom>
-                  Zestawy użytkownika
-                </Typography>
-                {
-                  userSets.map(({ name, subject }, index) => (
-                    <Link to={`/set/${index}`} key={index}>
-                      <Set key={name} name={name} subject={subject} />
-                    </Link>
-                  ))
-                }
-              </p>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card>
-                <List>
-                  <ListItem>
-                    <Typography variant="h6" gutterBottom>
-                      Dodatkowe opcje
-                    </Typography>
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    brak
-                  </ListItem>
-                </List>
-              </Card>
-            </Grid>
-          </Grid>
-        </Container>
-      </Main>
-    </>
-  )*/
 }

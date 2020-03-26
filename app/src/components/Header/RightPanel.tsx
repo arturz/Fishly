@@ -28,7 +28,7 @@ export default () => {
         <Button color="inherit" onClick={logOut}>
           Wyloguj
         </Button>
-        <Link to="/account" className={classes.link}>
+        <Link to={`/account/${user.userId}`} className={classes.link}>
           <IconButton edge="end" color="inherit">
             <AccountCircle />
           </IconButton>
