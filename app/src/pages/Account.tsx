@@ -7,6 +7,8 @@ import Set from '../components/Set'
 import DeleteAccountDialog from '../components/AccountPage/DeleteAccountDialog'
 import getAccount from '../api/account/getAccount'
 import { useStateValue } from '../state'
+import statuses from '../utils/statuses'
+import banAccount from '../api/account/admin/banAccount'
 
 const useStyles = makeStyles((theme: Theme) => ({
   notFoundText: {
@@ -19,13 +21,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const statuses = ['Rejestracja niepotwierdzona','Użytkownik','Administrator','Główny administrator','Zbanowano','Usunięto']
-
 export default () => {
   const [{ user }] = useStateValue()
   const { userId } = useParams()
-
-  const isSelf = (user && user.userId) === userId
 
   const [account, setAccount] = useState(null)
 
@@ -43,6 +41,13 @@ export default () => {
         <Typography variant="h4" className={classes.notFoundText}>Nie znaleziono użytkownika.</Typography>
       </Main>
     </>
+
+  const isSelf = (user && user.userId) === userId
+
+  const ban = async () => {
+    await banAccount(+userId)
+    location.reload()
+  }
 
   return <>
     <Header />
@@ -84,17 +89,22 @@ export default () => {
                   </Typography>
                 </ListItem>
                 <Divider />
-                {isSelf || <ListItem>brak</ListItem>}
-                {isSelf && <>
-                  {deleteAccountDialog && <DeleteAccountDialog handleClose={() => setDeleteAccountDialog(value => !value)} />}
-                  <ListItem button onClick={() => setDeleteAccountDialog(true)}>Usuń konto</ListItem>
-                  {(account.status == '2' || account.status == '3') &&
-                    <Link to="/admin" className={classes.link}>
-                      <ListItem button>
-                        Panel administratora
-                      </ListItem>
-                    </Link>}
-                </>}
+                {isSelf
+                  ? <>
+                      {deleteAccountDialog && <DeleteAccountDialog handleClose={() => setDeleteAccountDialog(value => !value)} />}
+                      <ListItem button onClick={() => setDeleteAccountDialog(true)}>Usuń konto</ListItem>
+                      {(user && (user.status == '2' || user.status == '3')) &&
+                        <Link to="/admin" className={classes.link}>
+                          <ListItem button>
+                            Panel administratora
+                          </ListItem>
+                        </Link>}
+                    </>
+                  : (user && (user.status == '2' || user.status == '3'))
+                    ? <>
+                        <ListItem button onClick={ban}>Zbanuj użytkownika</ListItem>
+                      </>
+                    : <ListItem>brak</ListItem>}
               </List>
             </Card>
           </Grid>

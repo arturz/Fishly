@@ -1,0 +1,1 @@
+export default ['Rejestracja niezweryfikowana','Użytkownik','Administrator','Główny administrator','Konto zbanowane','Konto usunięte']
