@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Main from '../components/Main'
 import { makeStyles, Container, Typography, Grid, Card, List, ListItem, Divider, Theme } from '@material-ui/core'
-import Set from '../components/Set'
+import SetsGroup from '../components/SetsGroup'
 import DeleteAccountDialog from '../components/AccountPage/DeleteAccountDialog'
 import getAccount from '../api/account/getAccount'
 import { useStateValue } from '../state'
@@ -62,7 +62,7 @@ export default () => {
             <Typography variant="body1" gutterBottom>{ account.firstname }</Typography>
             {isSelf && <>
               <Typography variant="h6">Nazwisko:</Typography>
-              <Typography variant="body1" gutterBottom>{ account.lastname }</Typography>
+              <Typography variant="body1" gutterBottom>{ account.lastname || 'nie podano' }</Typography>
               <Typography variant="h6">Login:</Typography>
               <Typography variant="body1" gutterBottom>{ account.login }</Typography>
               <Typography variant="h6">E-mail:</Typography>
@@ -73,11 +73,7 @@ export default () => {
             <br />
             {account.sets.length === 0 || <>
               <Typography variant="h6" gutterBottom>{ isSelf ? 'Twoje zestawy' : 'Zestawy użytkownika'}</Typography>
-              {account.sets.map(({ name, subject, set_id }) => (
-                <Link to={`/set/${set_id}`} key={set_id}>
-                  <Set key={name} name={name} subject={subject} />
-                </Link>
-              ))}
+              <SetsGroup sets={account.sets} justifyContent="flex-start" />
             </>}
           </Grid>
           <Grid item xs={12} md={4}>

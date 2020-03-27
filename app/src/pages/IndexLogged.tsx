@@ -4,10 +4,10 @@ import Header from '../components/Header'
 import Main from '../components/Main'
 import { Container, Theme, Typography, makeStyles, Button } from '@material-ui/core'
 import { useStateValue } from '../state'
-import Set from '../components/Set'
 import getSavedSets from '../api/set/saved/getSavedSets'
 import Find from '../components/IndexLogged/Find'
 import getCreatedSets from '../api/set/getCreatedSets'
+import SetsGroup from '../components/SetsGroup'
 
 const useStyles = makeStyles((theme: Theme) => ({
   hello: {
@@ -56,26 +56,14 @@ export default () => {
             <Typography variant="h5" gutterBottom>
               Zapisane zestawy
             </Typography>
-            <div className={classes.grouppedSets}>
-              {savedSets.map(({ name, subject, set_id }) => (
-                <Link to={`/set/${set_id}`} key={set_id}>
-                  <Set key={name} name={name} subject={subject} />
-                </Link>
-              ))}
-            </div>
+            <SetsGroup sets={savedSets} />
           </>}
           <Typography variant="h5" gutterBottom>
             Twoje zestawy
           </Typography>
           {createdSets.length === 0 
             ? <Typography variant="body1" gutterBottom>brak</Typography>
-            : <div className={classes.grouppedSets}>
-                {createdSets.map(({ name, subject, set_id }) => (
-                  <Link to={`/set/${set_id}`} key={set_id}>
-                    <Set key={name} name={name} subject={subject} />
-                  </Link>
-                ))}
-              </div>}
+            : <SetsGroup sets={createdSets} />}
           <Link to="/createset" className={classes.link}>
             <Button variant="outlined" color="primary">
               Stwórz nowy zestaw

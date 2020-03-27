@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Typography, Paper, InputBase, IconButton, makeStyles, Theme } from '@material-ui/core'
 import DirectionsIcon from '@material-ui/icons/Directions'
 import throttle from 'lodash.throttle'
-import Set from '../Set'
+import SetsGroup from '../SetsGroup'
 import findSets from '../../api/set/findSets'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -17,16 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   findButton: {
     padding: 10
-  },
-  grouppedSets: {
-    paddingBottom: theme.spacing(4),
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(0, 1, 1)
-    }
-  },
+  }
 }))
 
 const find = throttle(async (name: string) => {
@@ -36,7 +26,7 @@ const find = throttle(async (name: string) => {
 
 export default () => {
   const [name, setName] = useState('')
-  const [foundSets, setFoundSets] = useState([])
+  const [foundSets, setFoundSets] = useState(null)
 
   useEffect(() => {
     if(name)
@@ -56,12 +46,6 @@ export default () => {
         <DirectionsIcon />
       </IconButton>
     </Paper>
-    {foundSets.length !== 0 && <div className={classes.grouppedSets}>
-      {foundSets.map(({ name, subject, set_id }) => (
-        <Link to={`/set/${set_id}`} key={set_id}>
-          <Set key={name} name={name} subject={subject} />
-        </Link>
-      ))}
-    </div>}
+    {foundSets === null || <SetsGroup sets={foundSets} justifyContent="flex-start" />}
   </>
 }
