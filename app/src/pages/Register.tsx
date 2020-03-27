@@ -68,7 +68,7 @@ export default () => {
 
     setRegistrationState(RegistrationStates.Requesting)
     const result = await registration({ captcha, ...state })
-    console.log(result)
+    console.log('registration result:', result)
     if('error' in result){
       setRegistrationState(RegistrationStates.Initial)
       setError(result.error)

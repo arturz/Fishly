@@ -1,8 +1,6 @@
 import { stringify } from 'qs'
 
 export default async (path: string, data?: object) => {
-  console.log(data, stringify({...data}))
-
   const body = await fetch(path, {
     method: 'POST',
     headers: {

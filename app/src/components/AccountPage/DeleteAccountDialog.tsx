@@ -19,7 +19,7 @@ export default ({ handleClose }: { handleClose: () => any }) => {
     setDialogState(DialogStates.Requesting)
     const result = await deleteAccount(password)
     if('error' in result){
-      console.log(result.error)
+      console.warn(result.error)
       setDialogState(DialogStates.WrongPassword)
       return
     }

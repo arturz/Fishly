@@ -61,8 +61,6 @@ export default () => {
     
     const { user, token } = result
 
-    console.log(user, token)
-
     sessionStorage.setItem('token', token)
     dispatch({ type: 'logIn', payload: { user } })
   }
