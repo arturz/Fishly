@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Main from '../components/Main'
 import { Container, Theme, Typography, Grid, makeStyles, Card, List, ListItem, CardContent, CardActions, Button, TextField, Divider, IconButton, InputBase, Paper, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core'
 import createSet from '../api/set/createSet'
+import editSet from '../api/set/editSet'
 import { useHistory, useParams } from 'react-router-dom'
 import getSet from '../api/set/getSet'
 import Word from '../components/CreateSetPage/Word'
@@ -64,28 +65,6 @@ export default () => {
       return words.filter(word => word.word_id !== word_id)
     })
 
-  const history = useHistory()
-  let [submitting, setSubmitting] = useState(false)
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault()
-    
-    const filteredWords = words
-      .map(({ original, translated }) => ({ original, translated }))
-      .filter(({ original, translated }) => original && translated)
-
-    if(!name || !subject || filteredWords.length === 0)
-      return
-
-    setSubmitting(true)
-
-    const { setId } = await createSet(name, subject, filteredWords)
-    history.push(`/set/${setId}`)
-    setSubmitting(false)
-  }, [words, name, subject])
-
-  const classes = useStyles({})
-
-
   const { id } = useParams()
   const editing = id !== undefined
   const [fetchedSet, setFetchedSet] = useState(false)
@@ -106,6 +85,29 @@ export default () => {
       setFetchedSet(true)
     })
   }, [id])
+
+  const history = useHistory()
+  let [submitting, setSubmitting] = useState(false)
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault()
+    
+    const filteredWords = words
+      .map(({ original, translated }) => ({ original, translated }))
+      .filter(({ original, translated }) => original && translated)
+
+    if(!name || !subject || filteredWords.length === 0)
+      return
+
+    setSubmitting(true)
+
+    const { setId } = editing
+      ? await editSet(+id, name, subject, filteredWords)
+      : await createSet(name, subject, filteredWords)
+    history.push(`/set/${setId}`)
+    setSubmitting(false)
+  }, [words, name, subject])
+
+  const classes = useStyles({})
 
   console.log(words)
 

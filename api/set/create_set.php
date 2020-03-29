@@ -14,6 +14,8 @@
   $subject = mb_substr($_POST['subject'], 0, 20);
   $words = $_POST['words'];
 
+  $pdo->beginTransaction();
+
   $pdo
     ->prepare('INSERT INTO `set` (created_by, name, subject) VALUES (?,?,?)')
     ->execute([$userId, $name, $subject]);
@@ -24,6 +26,8 @@
       ->prepare('INSERT INTO word (set_id, original, translated) VALUES (?,?,?)')
       ->execute([$setId, $word['original'], $word['translated']]);
   }
+
+  $pdo->commit();
 
   echo json_encode([ 'setId' => $setId ]);
 ?>
