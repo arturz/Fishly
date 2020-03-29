@@ -89,8 +89,8 @@ export default () => {
           <Typography variant="h4" gutterBottom>Stwórz zestaw</Typography>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <div className={classes.controls}>
-              <TextField label="Nazwa zestawu" onChange={({ target: { value }}) => setName(value)} />
-              <TextField label="Kategoria" onChange={({ target: { value }}) => setSubject(value)} />
+              <TextField label="Nazwa zestawu" inputProps={{ required: true, minLength: 3, maxLength: 50 }} onChange={({ target: { value }}) => setName(value)} />
+              <TextField label="Kategoria" inputProps={{ required: true, minLength: 3, maxLength: 20 }} onChange={({ target: { value }}) => setSubject(value)} />
             </div>
             <Typography variant="h5" gutterBottom>Dodaj fiszki</Typography>
             <Grid container direction="column" className={classes.wordsContainer} spacing={1}>

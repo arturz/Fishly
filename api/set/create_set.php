@@ -10,8 +10,8 @@
   if(empty($_POST['name']) || empty($_POST['subject']) || empty($_POST['words']))
     throwError('Brakujące dane');
 
-  $name = $_POST['name'];
-  $subject = $_POST['subject'];
+  $name = mb_substr($_POST['name'], 0, 50);
+  $subject = mb_substr($_POST['subject'], 0, 20);
   $words = $_POST['words'];
 
   $pdo
