@@ -29,6 +29,9 @@ export default () => {
           <Route path="/set/:id">
             <Set />
           </Route>
+          <Route path="/createset/:id">
+            <CreateSet />
+          </Route>
           <Route path="/createset">
             <CreateSet />
           </Route>

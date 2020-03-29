@@ -160,14 +160,18 @@ export default () => {
                     <Grid container justify="space-between" className={classes.controls}>
                       {logged
                         ? <>
-                          {set.saved
-                            ? <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Usuń z zapisanych</Button> 
-                            : <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Zapisz</Button>}
-                          {set.reported || <Button variant="outlined" size="small" color="secondary" onClick={report}>Zgłoś</Button>}
+                            {set.saved
+                              ? <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Usuń z zapisanych</Button> 
+                              : <Button variant="contained" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Zapisz</Button>}
+                            {set.user_id === user.userId
+                              ? <Link to={`/createset/${set.set_id}`} className={classes.link}>
+                                  <Button variant="contained" size="small" color="primary">Edytuj</Button>
+                                </Link>
+                              : (set.reported || <Button variant="outlined" size="small" color="secondary" onClick={report}>Zgłoś</Button>)}
                           </>
-                        : <>
+                        : <> 
                             <Link to="/login" className={classes.link}>
-                              <Button variant="outlined" size="small" color="primary">Zapisz</Button>
+                              <Button variant="contained" size="small" color="primary">Zapisz</Button>
                             </Link>
                             <Link to="/login" className={classes.link}>
                               <Button variant="outlined" size="small" color="secondary">Zgłoś</Button>
