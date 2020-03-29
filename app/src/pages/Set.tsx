@@ -84,8 +84,14 @@ export default () => {
   }
 
   const report = async () => {
+    if(!confirm('Jesteś pewny, że chcesz zgłosić?'))
+      return
+    
     const { success } = await reportSet(set.set_id)
-    setSet({ ...set, reported: Boolean(success) })
+    const reported = Boolean(success)
+    setSet({ ...set, reported })
+    if(reported)
+      alert('Wysłano zgłoszenie')
   }
 
   const [{ user }] = useStateValue()
@@ -157,9 +163,7 @@ export default () => {
                           {set.saved
                             ? <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Usuń z zapisanych</Button> 
                             : <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Zapisz</Button>}
-                          {set.reported 
-                            ? <Button variant="outlined" size="small" color="secondary" disabled>Zgłoszono</Button>
-                            : <Button variant="outlined" size="small" color="secondary" onClick={report}>Zgłoś</Button>}
+                          {set.reported || <Button variant="outlined" size="small" color="secondary" onClick={report}>Zgłoś</Button>}
                           </>
                         : <>
                             <Link to="/login" className={classes.link}>
