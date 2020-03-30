@@ -123,6 +123,12 @@ export default () => {
       alert('Błąd')
   }
 
+  const formRef = useRef(null)
+  useEffect(() => {
+    if(formRef.current !== null)
+      formRef.current.scrollIntoView({ block: 'end' })
+  }, [words.length])
+
   if(editing && !fetchedSet)
     return <>
       <Header />
@@ -137,7 +143,7 @@ export default () => {
       <Main>
         <Container maxWidth="md">
           <Typography variant="h4" gutterBottom>{editing ? 'Edytuj zestaw' : 'Stwórz zestaw'}</Typography>
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit} ref={formRef}>
             <div className={classes.controls}>
               <TextField label="Nazwa zestawu" fullWidth inputProps={{ required: true, minLength: 3, maxLength: 50 }} onChange={({ target: { value }}) => setName(value)} value={name} />
               <TextField label="Kategoria" fullWidth inputProps={{ required: true, minLength: 3, maxLength: 20 }} onChange={({ target: { value }}) => setSubject(value)} value={subject} />
