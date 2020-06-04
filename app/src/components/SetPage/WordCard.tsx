@@ -65,18 +65,18 @@ export default ({ original, translated, reversedLanguage }: { original: string, 
         <Card className={`${classes.cardFace} ${classes.cardFaceBack}`}>
           <Typography variant="h4">
           {
-            original
+            translated
           }
           </Typography>
         </Card>
         <Card className={classes.cardFace}>
           <Typography variant="h4">
           {
-            translated
+            original
           }
           </Typography>
         </Card>
-        <SpeakButton word={translated} className={classes.speakButton} language="en" />
+        <SpeakButton word={original} className={classes.speakButton} language="en" />
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ export default ({ selected, starred, reversedLanguage, original, translated, onC
   const classes = useStyles({})
 
   return <ListItem button onClick={onClick} selected={selected} className={classes.item}> 
-    {reversedLanguage ? original : translated} 
+    {reversedLanguage ? original : translated } 
     {starred && <Rating readOnly value={1} max={1} size="small" />}
   </ListItem>
 }
