@@ -27,8 +27,8 @@
   $stmt = $pdo->prepare("DELETE FROM `word` WHERE set_id = ?");
   $stmt->execute([$setId]);
  
-  $name = mb_substr($_POST['name'], 0, 50);
-  $subject = mb_substr($_POST['subject'], 0, 20);
+  $name = mb_substr($_POST['name'], 0, 50, "utf-8");
+  $subject = mb_substr($_POST['subject'], 0, 20, "utf-8");
   $words = $_POST['words'];
 
   $pdo

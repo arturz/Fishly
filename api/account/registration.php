@@ -19,13 +19,13 @@
   if(empty($_POST['firstname']) || mb_strlen($_POST['firstname']) < 3)
     throwError('Złe imię');
 
-  $login = mb_substr($_POST['login'], 0, 16);
+  $login = mb_substr($_POST['login'], 0, 16, "utf-8");
   $password = $_POST['password'];
-  $email = mb_substr($_POST['email'], 0, 32);
-  $firstname = mb_substr($_POST['firstname'], 0, 16);
+  $email = mb_substr($_POST['email'], 0, 32, "utf-8");
+  $firstname = mb_substr($_POST['firstname'], 0, 16, "utf-8");
   $lastname = empty($_POST['lastname'])
     ? ''
-    : mb_substr($_POST['lastname'], 0, 24);
+    : mb_substr($_POST['lastname'], 0, 24, "utf-8");
   
   $stmt = $pdo->prepare('SELECT * FROM user WHERE login = ? AND status <> ?');
   $stmt->execute([$login, UserStatuses::getStatusIndex('deleted')]);

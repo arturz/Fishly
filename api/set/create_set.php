@@ -10,8 +10,8 @@
   if(empty($_POST['name']) || empty($_POST['subject']) || empty($_POST['words']))
     throwError('Brakujące dane');
 
-  $name = mb_substr($_POST['name'], 0, 50);
-  $subject = mb_substr($_POST['subject'], 0, 20);
+  $name = mb_substr($_POST['name'], 0, 50, "utf-8");
+  $subject = mb_substr($_POST['subject'], 0, 20, "utf-8");
   $words = $_POST['words'];
 
   $pdo->beginTransaction();
@@ -24,7 +24,7 @@
   foreach($words as $word){
     $pdo
       ->prepare('INSERT INTO word (set_id, original, translated) VALUES (?,?,?)')
-      ->execute([$setId, $word['original'], $word['translated']]);
+      ->execute([$setId, mb_substr($word['original'], 0, 32), mb_substr($word['translated'], 0, 32)]);
   }
 
   $pdo->commit();
