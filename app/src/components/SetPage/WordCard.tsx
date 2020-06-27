@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   cardFaceBack: {
     transform: 'rotateX(-180deg)'
   },
+  cardFaceFront: {
+    transform: 'rotateX(0deg)' //firefox fix
+  },
   speakButton: {
     position: 'absolute',
     right: theme.spacing(1),
@@ -69,14 +72,14 @@ export default ({ original, translated, reversedLanguage }: { original: string, 
           }
           </Typography>
         </Card>
-        <Card className={classes.cardFace}>
+        <Card className={`${classes.cardFace} ${classes.cardFaceFront}`}>
           <Typography variant="h4">
           {
             original
           }
           </Typography>
+          <SpeakButton word={original} className={classes.speakButton} language="en" />
         </Card>
-        <SpeakButton word={original} className={classes.speakButton} language="en" />
       </div>
     </div>
   )

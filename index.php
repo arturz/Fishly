@@ -18,7 +18,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="app/assets/css/app.css" type="text/css">
+    <link rel="icon" href="app/assets/icon.svg" type="image/svg+xml" />
   </head>
   <script type="text/javascript">
     var app = { 
