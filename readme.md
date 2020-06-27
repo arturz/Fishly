@@ -8,13 +8,13 @@ Activation mail may arrive after a few minutes.
 - PHP
 - React with TypeScript
 - Material UI
-- MySQL
+- MySQL (MariaDB)
 
 ## Development
 
 Place root folder inside htdocs, go to app and run ```npm run watch```
 
-You have to import tables structure from fishly.sql on your own.
+You have to import tables structure from fishly.sql on your own and change credentials inside api/core.php.
 
 ## Build
 
