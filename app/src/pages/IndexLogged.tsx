@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import { Button, Container, makeStyles, Theme, Typography } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Header from '../components/Header'
-import Main from '../components/Main'
-import { Container, Theme, Typography, makeStyles, Button } from '@material-ui/core'
-import { useStateValue } from '../state'
-import getSavedSets from '../api/set/saved/getSavedSets'
-import Find from '../components/IndexLogged/Find'
 import getCreatedSets from '../api/set/getCreatedSets'
+import getSavedSets from '../api/set/saved/getSavedSets'
+import Header from '../components/Header'
+import Find from '../components/IndexLogged/Find'
+import Main from '../components/Main'
 import SetsGroup from '../components/SetsGroup'
+import { useStateValue } from '../redux/state'
+import User from '../types/User'
 
 const useStyles = makeStyles((theme: Theme) => ({
   hello: {
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export default () => {
-  const [{ user: { firstname } }] = useStateValue()
+  const [state] = useStateValue()
+  const { firstname } = state.user as User
 
   const [savedSets, setSavedSets] = useState([])
   useEffect(() => {

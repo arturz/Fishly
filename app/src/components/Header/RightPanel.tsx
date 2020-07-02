@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
 import { Button, IconButton, makeStyles } from '@material-ui/core'
-import { Link } from 'react-router-dom'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import { useStateValue } from '../../state'
+import React, { useCallback } from 'react'
+import { Link } from 'react-router-dom'
+import { logOut } from '../../redux/actions'
+import { useStateValue } from '../../redux/state'
 import fetch from '../../utils/fetch'
 
 const useStyles = makeStyles(() => ({
@@ -16,8 +17,8 @@ export default () => {
   const [{ user }, dispatch] = useStateValue()
   const classes = useStyles({})
 
-  const logOut = useCallback(() => {
-    dispatch({ type: 'logOut' })
+  const _logOut = useCallback(() => {
+    dispatch(logOut())
     fetch('api/account/logout.php')
     document.cookie = 'PHPSESSID=;path=/;'
   }, [])
@@ -25,7 +26,7 @@ export default () => {
   if(user)
     return (
       <div>
-        <Button color="inherit" onClick={logOut}>
+        <Button color="inherit" onClick={_logOut}>
           Wyloguj
         </Button>
         <Link to={`/account/${user.userId}`} className={classes.link}>

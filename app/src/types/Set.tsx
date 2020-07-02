@@ -1,9 +1,4 @@
-export interface Word {
-  word_id: string
-  original: string
-  translated: string
-  starred?: boolean
-}
+import Word from "./Word";
 
 export default interface Set {
   words: Word[]

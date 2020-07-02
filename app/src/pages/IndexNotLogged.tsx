@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Typography, Button, Stepper, Step, StepLabel, makeStyles, Container } from '@material-ui/core'
+import { Button, Container, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import getLastestSets from '../api/set/getLatestSets'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import getLastestSets from '../api/set/getLatestSets'
 import SetsGroup from '../components/SetsGroup'
+import Set from '../types/Set'
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles({})
 
-  const [latestSets, setLatestSets] = useState(null)
+  const [latestSets, setLatestSets] = useState<Set[] | null>(null)
   useEffect(() => {
     getLastestSets().then(setLatestSets)
   }, [])
@@ -84,7 +85,7 @@ export default () => {
         </div>
         <Container maxWidth="md" className={classes.latest}>
           <Typography variant="h5" className={classes.latestText}>Ostatnio dodane zestawy</Typography>
-          {latestSets && <SetsGroup sets={latestSets} spacing={4} />}
+          {latestSets !== null && <SetsGroup sets={latestSets} spacing={4} />}
         </Container>
       </Main>
     </>

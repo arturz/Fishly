@@ -1,13 +1,14 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import { Button, CircularProgress, Container, Grid, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import createSet from '../api/set/createSet'
+import deleteSet from '../api/set/deleteSet'
+import editSet from '../api/set/editSet'
+import getSet from '../api/set/getSet'
+import Word from '../components/CreateSetPage/Word'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import { Container, Theme, Typography, Grid, makeStyles, Card, List, ListItem, CardContent, CardActions, Button, TextField, Divider, IconButton, InputBase, Paper, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core'
-import createSet from '../api/set/createSet'
-import editSet from '../api/set/editSet'
-import { useHistory, useParams } from 'react-router-dom'
-import getSet from '../api/set/getSet'
-import deleteSet from '../api/set/deleteSet'
-import Word from '../components/CreateSetPage/Word'
+import LanguagesPair from '../types/LanguagesPair'
 
 const useStyles = makeStyles((theme: Theme) => ({
   controls: {
@@ -34,6 +35,10 @@ interface NewWord {
   word_id?: string //updating current set
 }
 
+interface Params {
+  id: string
+}
+
 export default () => {
   const [name, setName] = useState('')
   const [subject, setSubject] = useState('')
@@ -46,7 +51,7 @@ export default () => {
 
   const [words, setWords] = useState<NewWord[]>([{ original: '', translated: '', index: lastWordIndex }])
 
-  const handleChangeWord = index => ({ original, translated }) =>
+  const handleChangeWord = (index: number) => ({ original, translated }: LanguagesPair) =>
     setWords(words => {
       const _words = [...words]
       const word = _words.find((word) => word.index === index)
@@ -63,7 +68,7 @@ export default () => {
       return _words
     })
 
-  const handleDeleteWord = index => () =>
+  const handleDeleteWord = (index: number) => () =>
     setWords(words => {
       //do not remove blank fields row at the bottom
       if(words.findIndex(word => word.index === index) === words.length - 1)
@@ -72,7 +77,7 @@ export default () => {
       return words.filter(word => word.index !== index)
     })
 
-  const { id } = useParams()
+  const { id } = useParams<Params>()
   const editing = id !== undefined
   const [fetchedSet, setFetchedSet] = useState(false)
 
@@ -80,7 +85,7 @@ export default () => {
     if(!editing)
       return
     
-    getSet(parseInt(id)).then(({ name, subject, words }) => {
+    getSet(parseInt(id)).then(({ name, subject = '', words }) => {
       setName(name)
       setSubject(subject)
       setWords([
@@ -126,10 +131,9 @@ export default () => {
       alert('Błąd')
   }
 
-  const formRef = useRef(null)
+  const formRef = useRef<HTMLFormElement>(null)
   useEffect(() => {
-    if(formRef.current !== null)
-      formRef.current.scrollIntoView({ block: 'end' })
+    formRef.current?.scrollIntoView({ block: 'end' })
   }, [words.length])
 
   if(editing && !fetchedSet)
@@ -139,8 +143,6 @@ export default () => {
         <CircularProgress />
       </Main>
     </>
-
-  console.log(words)
 
   return (
     <>

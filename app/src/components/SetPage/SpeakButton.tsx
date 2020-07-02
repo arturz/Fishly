@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react'
 import { IconButton } from '@material-ui/core'
 import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver'
+import React, { useCallback, useState } from 'react'
+import { Language } from '../../types/Language'
 
-export default ({ word, language = 'en', className }: { word: string, language, className?: string }) => {
+export default ({ word, language = 'en', className }: { word: string, language: Language, className?: string }) => {
   const [disabled, setDisabled] = useState(false)
 
   const speak = useCallback(() => {

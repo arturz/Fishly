@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
 import { Card, makeStyles, Theme } from '@material-ui/core'
 import random from 'random-int'
+import React, { ReactNode } from 'react'
 import { CARD_COUNT } from './consts'
 
 const useStyles = makeStyles((theme: Theme) => ({

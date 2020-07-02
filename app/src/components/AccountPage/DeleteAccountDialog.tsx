@@ -1,7 +1,8 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@material-ui/core'
 import deleteAccount from '../../api/account/deleteAccount'
-import { useStateValue } from '../../state'
+import { logOut } from '../../redux/actions'
+import { useStateValue } from '../../redux/state'
 
 enum DialogStates {
   Initial,
@@ -29,10 +30,10 @@ export default ({ handleClose }: { handleClose: () => any }) => {
 
   if(dialogState === DialogStates.Deleted)
     return (
-      <Dialog open={true} onClose={() => dispatch({ type: 'logOut' })}>
+      <Dialog open={true} onClose={() => dispatch(logOut())}>
         <DialogTitle>Konto zostało usunięte.</DialogTitle>
         <DialogActions>
-          <Button onClick={() => dispatch({ type: 'logOut' })} color="primary" autoFocus>
+          <Button onClick={() => dispatch(logOut())} color="primary" autoFocus>
             Zamknij
           </Button>
         </DialogActions>

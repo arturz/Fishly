@@ -1,12 +1,12 @@
 import { Avatar, Button, Card, CardContent, Container, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React, { useCallback, useState } from 'react'
-import ReCAPTCHA from "react-google-recaptcha"
 import registration from '../api/account/registration'
 import Alert from '../components/Alert'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import { captchaSiteKey } from '../initialState'
+import { captchaSiteKey } from '../redux/initialState'
+const ReCAPTCHA = require("react-google-recaptcha")
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
@@ -48,8 +48,8 @@ export default () => {
     firstname: '',
     lastname: ''
   })
-  const [captcha, setCaptcha] = useState(null)
-  const [error, setError] = useState(null)
+  const [captcha, setCaptcha] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const updateState = (key: string) => useCallback(({ target: { value } }) =>
     setState(state => ({
@@ -64,7 +64,7 @@ export default () => {
   const updateFirstname = updateState('firstname')
   const updateLastname = updateState('lastname')
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
     if(state.password !== state.repeatedPassword){

@@ -4,7 +4,17 @@
   "description": "",
   "scripts": {
     "build": "webpack --progress --env.NODE_ENV=production --mode production",
-    "watch": "webpack  --colors --debug --display-chunk -w --env.NODE_ENV=development --mode development"
+    "watch": "webpack  --colors --debug --display-chunk -w --env.NODE_ENV=development --mode development",
+    "test": "jest"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.ts"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy",
+      "\\.(jpg|jpeg|png|gif)$": "<rootDir>/src/__mocks__/fileMock.ts"
+    }
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.2.3",
@@ -30,6 +40,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.0.0-rc.1",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^12.12.14",
     "@types/react": "^16.9.25",
     "@types/react-dom": "^16.9.5",
@@ -53,22 +64,5 @@
     "webpack": "^4.17.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Davisonpro/php-react-starterkit.git"
-  },
-  "keywords": [
-    "React",
-    "PHP",
-    "PHP",
-    "react",
-    "kit"
-  ],
-  "author": "Davison Pro",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Davisonpro/php-react-starterkit/issues"
-  },
-  "homepage": "https://github.com/Davisonpro/php-react-starterkit#readme"
+  }
 }

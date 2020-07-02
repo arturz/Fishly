@@ -1,33 +1,15 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { CssBaseline } from '@material-ui/core'
-import { StateProvider } from './state'
-import initialState from './initialState'
-import Router from './router'
+import { CssBaseline } from "@material-ui/core";
+import React from "react";
+import { render } from "react-dom";
+import initialState from "./redux/initialState";
+import reducer from "./redux/reducer";
+import { StateProvider } from "./redux/state";
+import Router from "./router";
 
-import initReactFastclick from 'react-fastclick'
-initReactFastclick()
+const initReactFastclick = require("react-fastclick");
+initReactFastclick();
 
 const App = () => {
-  const reducer = (state, action) => {
-    switch(action.type){
-      case 'logOut':
-        return {
-          ...state,
-          user: null
-        }
-
-      case 'logIn':
-        return { 
-          ...state,
-          user: action.payload.user
-        }
-
-      default:
-        return state
-    }
-  }
-
   return (
     <>
       <CssBaseline />
@@ -35,7 +17,7 @@ const App = () => {
         <Router />
       </StateProvider>
     </>
-  )
-}
+  );
+};
 
-render(<App/>, document.getElementById('app'))
+render(<App />, document.getElementById("app"));

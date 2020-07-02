@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import { Button, Container, Grid, List, ListItem, makeStyles, Theme, Typography } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import getAccounts from '../api/account/admin/getAccounts'
+import deleteReport from '../api/set/admin/deleteReport'
+import getReportedSets from '../api/set/admin/getReportedSets'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import { makeStyles, Container, Typography, Grid, CircularProgress, Card, List, ListItem, CardContent, CardActions, Button, Divider, Theme } from '@material-ui/core'
-import getAccounts from '../api/account/admin/getAccounts'
-import getReportedSets from '../api/set/admin/getReportedSets'
-import deleteReport from '../api/set/admin/deleteReport'
+import Account from '../types/Account'
+import Set from '../types/Set'
 import statuses from '../utils/statuses'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,19 +31,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default () => {
   const classes = useStyles({})
 
-  const [accounts, setAccounts] = useState(null)
+  const [accounts, setAccounts] = useState<Account[] | null>(null)
   useEffect(() => {
     getAccounts().then(setAccounts)
   }, [])
 
-  const [reportedSets, setReportedSets] = useState(null)
+  const [reportedSets, setReportedSets] = useState<Set[] | null>(null)
   useEffect(() => {
     getReportedSets().then(setReportedSets)
   }, [])
 
   const delReport = (set_id: number) => {
-    deleteReport(set_id)
-    setReportedSets(reportedSets.filter(reportedSet => reportedSet.set_id !== set_id))
+    if(reportedSets !== null){
+      deleteReport(set_id)
+      setReportedSets(reportedSets.filter(reportedSet => reportedSet.set_id !== set_id))
+    }
   }
 
   return (

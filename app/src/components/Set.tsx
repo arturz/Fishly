@@ -1,7 +1,7 @@
+import { CardContent, makeStyles, Theme, Typography } from '@material-ui/core'
 import React, { memo } from 'react'
-import SingleCard from './StackedCards/SingleCard'
-import { makeStyles, CardContent, Typography, Theme } from '@material-ui/core'
 import { CARD_COUNT } from './StackedCards/consts'
+import SingleCard from './StackedCards/SingleCard'
 
 interface StyleProps {
   name: string
@@ -23,7 +23,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => ({
   }
 }))
 
-export default memo(({ name, subject }: { name: string, subject: string }) => {
+export default memo(({ name, subject }: { name: string, subject?: string }) => {
   const classes = useStyles({ name })
 
   return (

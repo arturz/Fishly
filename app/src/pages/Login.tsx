@@ -1,12 +1,13 @@
-import React, { useState, useCallback } from 'react'
-import { Theme, Container, makeStyles, Avatar, Typography, TextField, Button, CardContent, Card } from '@material-ui/core'
-import Header from '../components/Header'
-import Main from '../components/Main'
+import { Avatar, Button, Card, CardContent, Container, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import React, { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
 import logIn from '../api/account/logIn'
 import Alert from '../components/Alert'
-import { useStateValue } from '../state'
-import { Link } from 'react-router-dom'
+import Header from '../components/Header'
+import Main from '../components/Main'
+import { logIn as dispatchLogIn } from '../redux/actions'
+import { useStateValue } from '../redux/state'
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
@@ -41,16 +42,16 @@ export default () => {
     login: '',
     password: ''
   })
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const updateState = key => useCallback(({ target: { value } }) =>
+  const updateState = (key: string) => useCallback(({ target: { value } }) =>
     setState(state => ({
       ...state,
       [key]: value
     })), [])
   
   const [, dispatch] = useStateValue()
-  const handleSubmit = async event => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
     setLogInState(LogInStates.Requesting)
@@ -64,7 +65,7 @@ export default () => {
     const { user, token } = result
 
     sessionStorage.setItem('token', token)
-    dispatch({ type: 'logIn', payload: { user } })
+    dispatch(dispatchLogIn(user))
   }
   
   const classes = useStyles({})

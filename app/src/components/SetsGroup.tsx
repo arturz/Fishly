@@ -1,6 +1,7 @@
+import { makeStyles, Theme } from '@material-ui/core'
 import React from 'react'
-import { Theme, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import SetType from '../types/Set'
 import Set from './Set'
 
 interface StyleProps {
@@ -20,7 +21,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => ({
   }
 }))
 
-export default ({ sets, spacing = 1, justifyContent = 'center' }) => {
+export default ({ sets, spacing = 1, justifyContent = 'center' }: { sets: SetType[], spacing?: number, justifyContent?: string }) => {
   const classes = useStyles({ spacing, justifyContent })
 
   if(sets.length === 0)

@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useCallback, useLayoutEffect, memo } from 'react'
-import Set from '../../types/Set'
+import { Button, Card, Container, Divider, FormControlLabel, Grid, List, ListItem, makeStyles, Switch, Theme, Typography } from '@material-ui/core'
+import Rating from '@material-ui/lab/Rating'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import reportSet from '../../api/set/reportSet'
+import toggleSavedSet from '../../api/set/saved/toggleSavedSet'
 import Header from '../../components/Header'
 import Main from '../../components/Main'
-import { makeStyles, Container, Typography, Grid, CircularProgress, Card, List, ListItem, CardContent, CardActions, Button, Divider, Theme, FormControlLabel, Switch } from '@material-ui/core'
-import Rating from '@material-ui/lab/Rating'
-import { Link } from 'react-router-dom'
 import WordCard from '../../components/SetPage/WordCard'
-import toggleSavedSet from '../../api/set/saved/toggleSavedSet'
-import reportSet from '../../api/set/reportSet'
-import { useStateValue } from '../../state'
+import { useStateValue } from '../../redux/state'
+import Set from '../../types/Set'
+import User from '../../types/User'
 import Item from './Item'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,9 +40,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  set: Set | null
+  set: Set
   id: string
-  setSet: (object) => void
+  setSet: (set: Set) => void
 }
 
 export default ({ set, id, setSet }: Props) => {
@@ -53,7 +54,7 @@ export default ({ set, id, setSet }: Props) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
 
   const [reversedLanguage, setReversedLanguage] = useState(localStorage.getItem(REVERSED_KEY) === '1')
-  const reverseLanguage = (state) => {
+  const reverseLanguage = (state: boolean) => {
     setReversedLanguage(state)
     if(state){
       localStorage.setItem(REVERSED_KEY, '1')
@@ -64,7 +65,7 @@ export default ({ set, id, setSet }: Props) => {
   }
 
   const [showOnlyStarred, setShowOnlyStarred] = useState(localStorage.getItem(SHOW_ONLY_STARRED_KEY) === '1')
-  const toggleOnlyStarred = (state) => {
+  const toggleOnlyStarred = (state: boolean) => {
     setShowOnlyStarred(state)
 
     //go to start of list (prevent bug when new list is shorter than old list)
@@ -128,15 +129,14 @@ export default ({ set, id, setSet }: Props) => {
       alert('Wysłano zgłoszenie')
   }
 
-  const filteredWords = set === null ? [] : 
-    showOnlyStarred
-      ? set.words.filter(({ starred }) => starred)
-      : set.words
+  const filteredWords = showOnlyStarred
+    ? set.words.filter(({ starred }) => starred)
+    : set.words
 
   //current word
-  const word = set !== null && filteredWords[currentWordIndex]
+  const word = filteredWords[currentWordIndex]
 
-  const toggleWordStar = (e: any, starCount: number) => {
+  const toggleWordStar = (e: React.ChangeEvent<{}>, starCount: number | null) => {
     const starred = starCount === 1
 
     if(localStorage.getItem(STARS_LIST_KEY) === null)
@@ -145,13 +145,13 @@ export default ({ set, id, setSet }: Props) => {
     if(starred){
       localStorage.setItem(STARS_LIST_KEY, 
         JSON.stringify(
-          [...JSON.parse(localStorage.getItem(STARS_LIST_KEY)), word.word_id]
+          [...JSON.parse(localStorage.getItem(STARS_LIST_KEY) as string), word.word_id]
         )
       )
     } else {
       localStorage.setItem(STARS_LIST_KEY, 
         JSON.stringify(
-          JSON.parse(localStorage.getItem(STARS_LIST_KEY)).filter(word_id => word_id !== word.word_id)
+          JSON.parse(localStorage.getItem(STARS_LIST_KEY) as string).filter((word_id: string) => word_id !== word.word_id)
         )
       )
     }
@@ -166,7 +166,7 @@ export default ({ set, id, setSet }: Props) => {
     if(set === null || localStorage.getItem(STARS_LIST_KEY) === null || 'starred' in set.words[0])
       return
 
-    const stars = JSON.parse(localStorage.getItem(STARS_LIST_KEY))
+    const stars = JSON.parse(localStorage.getItem(STARS_LIST_KEY) as string)
 
     setSet({ 
       ...set,
@@ -180,17 +180,6 @@ export default ({ set, id, setSet }: Props) => {
 
   const [{ user }] = useStateValue()
   const logged = user !== null
-
-  if(set === null)
-    return (
-      <>
-        <Header />
-        <Main>
-          <CircularProgress />
-        </Main>
-      </>
-    )
-
   return (
     <>
       <Header />
@@ -262,7 +251,7 @@ export default ({ set, id, setSet }: Props) => {
                             {set.saved
                               ? <Button variant="outlined" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Usuń z zapisanych</Button> 
                               : <Button variant="contained" onClick={toggleSavedState} size="small" color="primary" disabled={saveTransform}>Zapisz zestaw</Button>}
-                            {set.user_id === user.userId
+                            {set.user_id === (user as User).userId
                               ? <Link to={`/createset/${set.set_id}`} className={classes.link}>
                                   <Button variant="contained" size="small" color="primary">Edytuj</Button>
                                 </Link>

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { Typography, Paper, InputBase, IconButton, makeStyles, Theme } from '@material-ui/core'
+import { IconButton, InputBase, makeStyles, Paper, Theme, Typography } from '@material-ui/core'
 import DirectionsIcon from '@material-ui/icons/Directions'
 import throttle from 'lodash.throttle'
-import SetsGroup from '../SetsGroup'
+import React, { useEffect, useState } from 'react'
 import findSets from '../../api/set/findSets'
+import Set from '../../types/Set'
+import SetsGroup from '../SetsGroup'
 
 const useStyles = makeStyles((theme: Theme) => ({
   findContainer: {
@@ -20,17 +21,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const find = throttle(async (name: string) => {
-  const sets = await findSets(name)
-  return sets
+  return await findSets(name)
 }, 300)
 
 export default () => {
   const [name, setName] = useState('')
-  const [foundSets, setFoundSets] = useState(null)
+  const [foundSets, setFoundSets] = useState<Set[] | null>(null)
 
   useEffect(() => {
-    if(name)
-      find(name).then(setFoundSets)
+    if(name){
+      const throttled = find(name)
+      if(throttled !== undefined) throttled.then(setFoundSets)
+    }
     else
       setFoundSets([])
   }, [name])

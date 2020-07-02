@@ -1,19 +1,19 @@
 import React from 'react'
-import { HashRouter, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-import { useStateValue } from './state'
+import { BrowserRouter, HashRouter, Redirect, Route, Switch } from 'react-router-dom'
+import Account from './pages/Account'
+import Admin from './pages/Admin'
+import CreateSet from './pages/CreateSet'
 import IndexLogged from './pages/IndexLogged'
 import IndexNotLogged from './pages/IndexNotLogged'
-import Set from './pages/Set'
-import CreateSet from './pages/CreateSet'
-import Account from './pages/Account'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Admin from './pages/Admin'
+import Set from './pages/Set'
+import { useStateValue } from './redux/state'
 
 //check for localhost
 const Router = ['localhost','127.0.0.1','[::1]',''].includes(location.hostname)
-  ? props => <HashRouter {...props} />
-  : props => <BrowserRouter {...props} />
+  ? ({ children }: { children: React.ReactNode }) => <HashRouter>{children}</HashRouter>
+  : ({ children }: { children: React.ReactNode }) => <BrowserRouter>{children}</BrowserRouter>
 
 export default () => {
   const [{ user }] = useStateValue()
@@ -39,7 +39,7 @@ export default () => {
             <Account />
           </Route>
           {
-            (user.status == '2' || user.status == '3') && (
+            (user.status === 2 || user.status === 3) && (
               <Route path="/admin">
                 <Admin />
               </Route>
