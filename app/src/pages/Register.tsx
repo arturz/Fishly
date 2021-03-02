@@ -37,6 +37,8 @@ enum RegistrationStates {
 }
 
 export default () => {
+  console.log('captchaSiteKey:', captchaSiteKey)
+
   const [registrationState, setRegistrationState] = useState(RegistrationStates.Initial)
   const [state, setState] = useState({
     login: '',
@@ -49,7 +51,7 @@ export default () => {
   const [captcha, setCaptcha] = useState(null)
   const [error, setError] = useState(null)
 
-  const updateState = key => useCallback(({ target: { value } }) =>
+  const updateState = (key: string) => useCallback(({ target: { value } }) =>
     setState(state => ({
       ...state,
       [key]: value
@@ -107,7 +109,7 @@ export default () => {
                         <TextField fullWidth label="Nazwisko" onChange={updateLastname} />
                       </div>
                       <div>
-                        <ReCAPTCHA sitekey={captchaSiteKey} onChange={setCaptcha} className={classes.gutterBottom} />
+                        <ReCAPTCHA sitekey={window.captchaSiteKey} onChange={setCaptcha} className={classes.gutterBottom} />
                         <Button fullWidth variant="contained" size="large" color="primary" type="submit" disabled={registrationState === RegistrationStates.Requesting}>
                           Zarejestruj się
                         </Button>
