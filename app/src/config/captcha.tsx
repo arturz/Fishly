@@ -1,1 +1,3 @@
-export const captchaSitekey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+const testCaptchaSitekey = '6Le7sG4aAAAAAJz46ddHqzDhLXJq7hARw_8c_0YG'
+
+export const captchaSitekey = process.env.CAPTCHA_SITE_KEY || testCaptchaSitekey

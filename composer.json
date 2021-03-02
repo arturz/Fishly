@@ -1,0 +1,6 @@
+{
+  "require": {
+    "php": ">=7.3.0 <=8.0.1",
+    "sendgrid/sendgrid": "~7"
+  }
+}

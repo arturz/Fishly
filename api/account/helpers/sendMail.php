@@ -1,4 +1,6 @@
 <?php
+  require_once dirname(__DIR__) . '../../../vendor/autoload.php';
+
   /**
    * Wysyła wiadomość na podany email, z danym tytułem i daną treścią (może zawierać kod HTML).
    *
@@ -8,14 +10,12 @@
    * @return bool
    */
   function sendMail($to, $title, $content){
-    $from = 'admin@fishly.com';
+    $email = new \SendGrid\Mail\Mail(); 
+    $email->setFrom(getenv("MAIL_SENDER"), "Fishly");
+    $email->setSubject($title);
+    $email->addTo($to, "Unverified account");
 
-    $headers = "";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=utf-8\r\n";
-    $headers .= "From: <".$from.">\r\n";
-
-    $message = <<< END
+    $content = <<< END
       <html>
         <head>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -35,7 +35,18 @@
         </body>
       </html>
     END;
+    $email->addContent("text/html", $content);
 
-    return mail("<$to>", $title, $message, $headers);
+    $sendgrid = new \SendGrid(getenv("SENDGRID_API_KEY"));
+    try {
+      $response = $sendgrid->send($email);
+      print $response->statusCode() . "\n";
+      print_r($response->headers());
+      print $response->body() . "\n";
+      return true;
+    } catch (Exception $e) {
+      echo 'Caught exception: '. $e->getMessage() ."\n";
+      return false;
+    }
   }
 ?>

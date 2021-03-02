@@ -1,24 +1,37 @@
 # Fishly
 
-Live deploy: [fishly](http://fishly.ct8.pl/).
-
-Activation mail may arrive after a few minutes.
-
 ## Stack
-- PHP
-- React with TypeScript
-- Material UI
-- MySQL (MariaDB)
+
+- Back-end: PHP, MySQL
+- Front-end: React, TypeScript
+
+## Requirements
+
+- PHP 7.3.0+
+- Composer
 
 ## Development
 
-Place root folder inside htdocs, go to app and run ```npm run watch```
+With `XAMPP`: place root folder inside htdocs and run `npm run watch`
 
-You have to import tables structure from fishly.sql on your own and change credentials inside api/core.php.
+You have to import tables structure from fishly.sql on your own and, if needed, change **developmental** credentials inside `api/core.php`.
+
+## Production
+
+### Vars
+
+- _MySQL_: **CLEARDB_DATABASE_URL**
+- _mail provider_: **SENDGRID_PASSWORD**, **SENDGRID_USERNAME**
+- _full link to domain_ (e.g. `https://domain.com`): **URL**
+- _verification mails sender address_ (e.g. `verify@domain.com`): **MAIL_SENDER**
+- _ReCAPTCHA v2 pair_: **CAPTCHA_SITE_KEY**, **CAPTCHA_SECRET_KEY**
+
+You can generate reCAPTCHA pair [here](http://www.google.com/recaptcha/admin).
 
 ## Build
 
-Go to app and run ```npm run build```
+`npm run build`
 
 ## License
+
 MIT
