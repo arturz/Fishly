@@ -6,7 +6,7 @@ import registration from '../api/account/registration'
 import Alert from '../components/Alert'
 import Header from '../components/Header'
 import Main from '../components/Main'
-import { captchaSitekey } from '../initialState'
+import { captchaSiteKey } from '../initialState'
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
@@ -107,7 +107,7 @@ export default () => {
                         <TextField fullWidth label="Nazwisko" onChange={updateLastname} />
                       </div>
                       <div>
-                        <ReCAPTCHA sitekey={captchaSitekey} onChange={setCaptcha} className={classes.gutterBottom} />
+                        <ReCAPTCHA sitekey={captchaSiteKey} onChange={setCaptcha} className={classes.gutterBottom} />
                         <Button fullWidth variant="contained" size="large" color="primary" type="submit" disabled={registrationState === RegistrationStates.Requesting}>
                           Zarejestruj się
                         </Button>
