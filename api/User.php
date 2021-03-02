@@ -8,11 +8,11 @@
   abstract class UserStatuses {
     protected static $statuses = ['registration_not_confirmed','user','admin','head_admin','banned','deleted'];
 
-    public function getStatusIndex($status){
+    public static function getStatusIndex($status){
       return array_search($status, UserStatuses::$statuses);
     }
 
-    public function getStatusName($statusIndex){
+    public static function getStatusName($statusIndex){
       return UserStatuses::$statuses[$statusIndex];
     }
   }
